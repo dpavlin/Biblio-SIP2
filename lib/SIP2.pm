@@ -2,6 +2,13 @@ package SIP2;
 
 use Data::Dump qw();
 
+our $sock;
+
+sub connect {
+	$sock = IO::Socket::INET->new( @_ ) || die "can't connect to ", dump(@_), ": $!";
+}
+
+
 my $message_codes;
 foreach ( <DATA> ) {
 	my ($code,$description) = split(/\t/,$_,2);
@@ -14,6 +21,23 @@ sub dump_message {
 	my $code = substr($message,0,2);
 	warn $prefix, " ", $message_codes->{$code}, Data::Dump::dump($message), "\n";
 }
+
+
+sub send {
+	my ( $send ) = @_;
+	SIP2::dump_message '>>>>', $send;
+	print $sock "$send\r\n";
+	$sock->flush;
+
+#	local $/ = "\r";
+
+	my $expect = substr($send,0,2) | 0x01;
+
+	my $in = <$sock>;
+	SIP2::dump_message '<<<<', $in;
+	die "expected $expect" unless substr($in,0,2) != $expect;
+}
+
 
 1;
 

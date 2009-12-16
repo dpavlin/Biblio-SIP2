@@ -16,34 +16,27 @@ require 'config.pl' if -e 'config.pl';
 
 use SIP2;
 
-our $sock = IO::Socket::INET->new( '10.60.0.251:6001' );
-
-
-sub sip2 {
-	my ( $send, $patt ) = @_;
-	SIP2::dump_message '>>>>', $send;
-	print $sock "$send\r\n";
-	$sock->flush;
-
-#	local $/ = "\r";
-
-	my $in = <$sock>;
-	SIP2::dump_message '<<<<', $in;
-	die "expected $patt" unless $in =~ $patt;
-}
+SIP2::connect '10.60.0.251:6001';
 
 # login
-sip2 "9300CN$user|CO$password|" => qr/^941/;
+SIP2::send "9300CN$user|CO$password|";
 
 # SC Status
-sip2 "9900302.00" => qr/^98/;
+SIP2::send "9900302.00";
 
 # Patron Information
-sip2 "6300020091214    085452          AO$loc|AA$patron|AC$password|" => qr/^64/;
+SIP2::send "6300020091214    085452          AO$loc|AA$patron|AC$password|";
 
 # Checkout
-sip2 "11YN20091214    124436                  AO$loc|AA$patron|AB$barcode|AC$password|BON|BIN|" => qw/12/;
+SIP2::send "11YN20091214    124436                  AO$loc|AA$patron|AB$barcode|AC$password|BON|BIN|";
 
 # Checkin
-sip2 "09N20091214    08142820091214    081428AP|AO$loc|AB$barcode|AC|BIN|" => qr/^10/;
+SIP2::send "09N20091214    08142820091214    081428AP|AO$loc|AB$barcode|AC|BIN|";
+
+
+# checkout another
+SIP2::send "09N20091216    15320820091216    153208AP|AOFFZG|AB200903160190|ACviva2koha|BIN|";
+
+# status
+SIP2::send "9900302.00";
 
