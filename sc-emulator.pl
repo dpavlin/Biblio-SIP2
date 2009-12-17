@@ -14,7 +14,7 @@ require 'config.pl' if -e 'config.pl';
 use lib 'lib';
 use SIP2::SC;
 
-my $sc = SIP2::SC->new( '10.60.0.251:6001' );
+my $sc = SIP2::SC->new( $ENV{ACS} || '10.60.0.251:6001' );
 
 # login
 $sc->message("9300CN$user|CO$password|");
