@@ -44,10 +44,21 @@ while (1) {
 		} else {
 			warn dump($sock);
 			my $line = <$sock>;
+			if ( ! defined $line ) {
+				if ( ! $sock->connected ) {
+					warn "disconnect from ", $sock->peerhost;
+					$sel->remove( $sock );
+					delete( $sc->{$sock} );
+					close($sock);
+					next;
+				}
+				warn "no data from ", $sock->peerhost;
+				next;
+			}
 			my $ip = $sock->peerhost;
 			warn "<< $ip ", dump($line);
 			if ( ! $sc->{$sock} ) {
-				warn "no $sock in ",dump( $sc );
+				warn "connect to $server for $sock\n";
 				$sc->{$sock} = SIP2::SC->new( $server );
 			}
  			$line .= "\n"; # lf to fix Koha ACS
