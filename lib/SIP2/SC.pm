@@ -31,12 +31,13 @@ sub message {
 
 	local $/ = "\r";
 
-
 	my $sock = $self->{sock} || die "no sock?";
 	my $ip = $self->{sock}->peerhost;
 
+	$send .= "\r" unless $send =~ m/\r/;
+
 	$self->dump_message( ">>>> $ip ", $send );
-	print $sock "$send\r\n";	# FIXME we should have only CR here per protocol!
+	print $sock $send;
 	$sock->flush;
 
 	my $expect = substr($send,0,2) | 0x01;
