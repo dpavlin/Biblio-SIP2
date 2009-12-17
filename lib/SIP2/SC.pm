@@ -21,6 +21,7 @@ sub new {
 	my $class = shift;
 	my $self;
 	$self->{sock} = IO::Socket::INET->new( @_ ) || die "can't connect to ", dump(@_), ": $!";
+	warn "# connected to ", $self->{sock}->peerhost, ":", $self->{sock}->peerport, "\n";
 	bless $self, $class;
 	$self;
 }
