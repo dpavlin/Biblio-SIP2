@@ -4,6 +4,7 @@ use Data::Dump qw();
 
 our $message_codes;
 foreach ( <DATA> ) {
+	chomp;
 	my ($code,$description) = split(/\t/,$_,2);
 	$message_codes->{$code} = $description;
 }
@@ -12,7 +13,7 @@ warn "# message_codes ", Data::Dump::dump $message_codes;
 sub dump_message {
 	my ( $self, $prefix, $message ) = @_;
 	my $code = substr($message,0,2);
-	warn $prefix, " ", $message_codes->{$code}, Data::Dump::dump($message), "\n";
+	warn $prefix, " ", $message_codes->{$code}, " ", Data::Dump::dump($message), "\n";
 }
 
 
