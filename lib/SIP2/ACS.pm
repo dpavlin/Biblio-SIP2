@@ -42,17 +42,12 @@ while (1) {
 			warn "connection from $ip\n";
 			$sel->add($new);
 		} else {
-			warn dump($sock);
 			my $line = <$sock>;
 			if ( ! defined $line ) {
-				if ( ! $sock->connected ) {
-					warn "disconnect from ", $sock->peerhost;
-					$sel->remove( $sock );
-					delete( $sc->{$sock} );
-					close($sock);
-					next;
-				}
-				warn "no data from ", $sock->peerhost;
+				warn "disconnect from ", $sock->peerhost;
+				$sel->remove( $sock );
+				delete( $sc->{$sock} );
+				close($sock);
 				next;
 			}
 			my $ip = $sock->peerhost;
