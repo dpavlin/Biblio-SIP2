@@ -43,6 +43,9 @@ sub message {
 	my $expect = substr($send,0,2) | 0x01;
 
 	my $in = <$sock>;
+
+	die "ERROR: no response from $ip\n" unless $in;
+
 	$in =~ s/^\n// && warn "removed LF from beginning";
 	$self->dump_message( "<<<< $ip ", $in );
 	die "expected $expect" unless substr($in,0,2) != $expect;
