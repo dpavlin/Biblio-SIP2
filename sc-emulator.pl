@@ -6,7 +6,7 @@ use strict;
 our $user     = 'sip2-user';
 our $password = 'sip2-paasswd';
 our $patron   = 200000000042;
-our $barcode  = 1301132799;
+our $barcode  = 1302029710;
 our $loc      = 'FFZG';
 
 require 'config.pl' if -e 'config.pl';
