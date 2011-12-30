@@ -42,8 +42,8 @@ sub proxy {
 				warn "connection from $ip\n";
 				$sel->add($new);
 			} else {
-				my $line = <$sock>;
-				if ( ! defined $line ) {
+				my $request = <$sock>;
+				if ( ! defined $request ) {
 					warn "disconnect from ", $sock->peerhost;
 					$sel->remove( $sock );
 					delete( $sc->{$sock} );
@@ -51,13 +51,16 @@ sub proxy {
 					next;
 				}
 				my $ip = $sock->peerhost;
-				warn "<< $ip ", dump($line);
+				warn "<< $ip ", dump($request);
 				if ( ! $sc->{$sock} ) {
 					warn "connect to $server for $sock\n";
 					$sc->{$sock} = SIP2::SC->new( $server );
 				}
-				$line .= "\n"; # lf to fix Koha ACS
-				print $sock $sc->{$sock}->message( $line )
+				$request .= "\n" if $request !~ m/\n$/ && $ENV{CRLF};
+				my $response = $sc->{$sock}->message( $request );
+				$response .= "\n" if $response !~ m/\n$/ && $ENV{CRLF};
+				print $sock $response;
+				warn ">> $ip ", dump($response);
 			}
 		}
 	}
