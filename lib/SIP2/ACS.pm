@@ -38,7 +38,7 @@ sub proxy {
 
 			if ($sock == $lsn) {
 				my $new = $lsn->accept;
-				my $ip = $sock->peerhost;
+				my $ip = $new->peerhost;
 				warn "connection from $ip\n";
 				$sel->add($new);
 			} else {
