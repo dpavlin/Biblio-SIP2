@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 our $user     = 'sip2-user';
-our $password = 'sip2-paasswd';
+our $password = 'sip2-passwd';
 our $patron   = 200000000042;
 our $barcode  = 1302029710;
 our $loc      = 'FFZG';
@@ -22,6 +22,7 @@ $sc->message("9300CN$user|CO$password|");
 # SC Status
 $sc->message("9900302.00");
 
+# Patron Information
 $sc->message("6300020091214    085452          AO$loc|AA$patron|AC$password|");
 
 # Checkout
