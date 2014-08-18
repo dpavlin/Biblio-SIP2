@@ -31,9 +31,11 @@ $sc->message("11YN20091214    124436                  AO$loc|AA$patron|AB$barcod
 # Checkin
 $sc->message("09N20091214    08142820091214    081428AP|AO$loc|AB$barcode|AC|BIN|");
 
+# Checkin - invalid barcode
+$sc->message("09N20091216    15320820091216    153208AP|AO$loc|AB200903160190|AC$password|BIN|");
 
-# checkout - invalid barcode
-$sc->message("09N20091216    15320820091216    153208AP|AOFFZG|AB200903160190|ACviva2koha|BIN|");
+# End Patron Session
+$sc->message("3520140818    091937AO$loc|AA$patron");
 
 # status
 $sc->message("9900302.00");
